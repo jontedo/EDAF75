@@ -11,31 +11,31 @@ PRAGMA foreign_keys = off;
 
 -- Drop the tables if they already exist.
 
-DROP TABLE IF EXISTS students;
-CREATE TABLE students (
-  ssn          CHAR(11),
-  first_name   TEXT NOT NULL,
-  last_name    TEXT NOT NULL,
-  PRIMARY KEY  (ssn)
+DROP TABLE IF EXISTS customer;
+CREATE TABLE customer (
+  full_name   TEXT NOT NULL,
+  username    TEXT NOT NULL,
+  password    TEXT NOT NULL,
+  PRIMARY KEY  (username)
 );
 
-DROP TABLE IF EXISTS courses;
-CREATE TABLE courses (
-  course_code      CHAR(6),
-  course_name      TEXT NOT NULL,
-  department_code  TEXT,
-  level            CHAR(2),
-  credits          DOUBLE NOT NULL CHECK (credits > 0),
+DROP TABLE IF EXISTS ticket;
+CREATE TABLE ticket (
+  id              INTEGER NOT NULL,
+  start_time      TIME NOT NULL,
+  username        TEXT NOT NULL,
+  theater_name    TEXT NOT NULL,
+  movie_name      TEXT NOT NULL,
   PRIMARY KEY      (course_code),
-  FOREIGN KEY      (department_code) REFERENCES departments(department_code)
+  FOREIGN KEY      (username) REFERENCES customer(username)
 );
 
-DROP TABLE IF EXISTS taken_courses;
-CREATE TABLE taken_courses (
+DROP TABLE IF EXISTS theater;
+CREATE TABLE theater (
   ssn           CHAR(11),
   course_code   CHAR(6),
   grade         INTEGER NOT NULL CHECK (grade >= 3 AND grade <= 5),
-  PRIMARY KEY   (ssn, course_code),
+  PRIMARY KEY   (theater_name),
   FOREIGN KEY   (ssn) REFERENCES students(ssn),
   FOREIGN KEY   (course_code) REFERENCES courses(course_code)
 );
