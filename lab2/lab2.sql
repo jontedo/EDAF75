@@ -94,4 +94,4 @@ END TRANSACTION;
 PRAGMA foreign_key = on;
 
 --Powershell promt, enter in terminal:
---Get-Content lab2-setup.sql | & sqlite3 movies.sqlite
+--Get-Content lab2.sql | & sqlite3 movies.sqlite
