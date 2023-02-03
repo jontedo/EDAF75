@@ -1,7 +1,7 @@
--- SQL script to create the tables necessary for lab 1 in EDAF75.
+-- SQL script to create the tables necessary for lab 2 in EDAF75.
 -- MySQL version.
 --
--- Creates the tables students, courses, taken_courses and
+-- Creates the tables customers, tickets, theaters, movies and
 -- populates them with (simulated) data.
 --
 -- We disable foreign key checks temporarily so we can delete the
@@ -25,11 +25,11 @@ CREATE TABLE tickets (
   start_time      TIME NOT NULL,
   username        TEXT NOT NULL,
   theater_name    TEXT NOT NULL,
-  movie_name      TEXT NOT NULL,
-  PRIMARY KEY      (id),
-  FOREIGN KEY      (username) REFERENCES customer(username),
-  FOREIGN KEY      (theater_name) REFERENCES theaters(theater_name),
-  FOREIGN KEY      (movie_name) REFERENCES movies(movie_name)
+  imdb_key        TEXT NOT NULL,
+  PRIMARY KEY     (id),
+  FOREIGN KEY     (username) REFERENCES customers(username),
+  FOREIGN KEY     (theater_name) REFERENCES theaters(theater_name)
+  FOREIGN KEY     (imdb_key) REFERENCES movies(imdb_key)
 );
 
 DROP TABLE IF EXISTS theaters;
@@ -61,10 +61,10 @@ VALUES ('Filip Lennhager','fi1234le','abc123'),
        ('Jonathan Do','jo1234do','123abc'),
        ('Felix Rödén','fe1234rö','lösenord');
 
--- Populate the students table.
+-- Populate the tickets table.
 
 --INSERT OR REPLACE
---INTO   tickets(id, start_time, username, theater_name, movie_name)
+--INTO   tickets(start_time, username, theater_name, movie_name)
 --VALUES (),
 --       (),
 --       ();
@@ -81,9 +81,9 @@ VALUES ('Lund', 100),
 
 INSERT OR REPLACE
 INTO   movies(movie_name, imdb_key, running_time, production_year)
-VALUES ('Alien', 'a1', 90, 1980),
-       ('Pulp Fiction', 'a2', 93, 1990),
-       ('Interstellar', 'a3', 120, 2015);
+VALUES ('Alien', 'tt0078748', 117, 1979),
+       ('Pulp Fiction', 'tt0110912', 154, 1994),
+       ('Interstellar', 'tt0816692', 169, 2014);
 
 -- Commit the transaction.
 
