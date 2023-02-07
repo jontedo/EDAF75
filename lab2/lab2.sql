@@ -13,23 +13,31 @@ PRAGMA foreign_keys = off;
 
 DROP TABLE IF EXISTS customers;
 CREATE TABLE customers (
-  full_name   TEXT NOT NULL,
-  username    TEXT NOT NULL,
-  password    TEXT NOT NULL,
-  PRIMARY KEY  (username)
+  full_name     TEXT NOT NULL,
+  username      TEXT NOT NULL,
+  password      TEXT NOT NULL,
+  PRIMARY KEY   (username)
 );
 
 DROP TABLE IF EXISTS tickets;
 CREATE TABLE tickets (
-  id              TEXT DEFAULT (lower(hex(randomblob(16)))),
-  start_time      TIME NOT NULL,
-  username        TEXT NOT NULL,
-  theater_name    TEXT NOT NULL,
-  imdb_key        TEXT NOT NULL,
-  PRIMARY KEY     (id),
-  FOREIGN KEY     (username) REFERENCES customers(username),
-  FOREIGN KEY     (theater_name) REFERENCES theaters(theater_name)
-  FOREIGN KEY     (imdb_key) REFERENCES movies(imdb_key)
+  ticket_id         TEXT DEFAULT (lower(hex(randomblob(16)))),
+  performance_id    INTEGER NOT NULL,
+  username          TEXT NOT NULL,
+  PRIMARY KEY       (ticket_id),
+  FOREIGN KEY       (performance_id) REFERENCES performances(performance_id),
+  FOREIGN KEY       (username) REFERENCES customers(username)
+);
+
+DROP TABLE IF EXISTS performances;
+CREATE TABLE performances (
+  performance_id                INTEGER PRIMARY KEY AUTOINCREMENT,
+  start_time                    TIME NOT NULL,
+  performance_date              DATE NOT NULL,
+  theater_name                  TEXT NOT NULL,
+  imdb_key                      TEXT NOT NULL,
+  FOREIGN KEY                   (theater_name) REFERENCES theaters(theater_name),
+  FOREIGN KEY                   (imdb_key) REFERENCES movies(imdb_key)
 );
 
 DROP TABLE IF EXISTS theaters;
@@ -43,11 +51,10 @@ DROP TABLE IF EXISTS movies;
 CREATE TABLE movies (
   movie_name        TEXT NOT NULL,
   imdb_key          TEXT NOT NULL,
-  running_time      TIME NOT NULL,
-  production_year   INTEGER NOT NULL,
-  PRIMARY KEY (imdb_key)
+  running_time      INT NOT NULL,
+  production_year   INT NOT NULL,
+  PRIMARY KEY       (imdb_key)
 );
-
 
 -- We will do a lot of inserts, so we start a transaction to make it faster.
 
@@ -63,11 +70,11 @@ VALUES ('Filip Lennhager','fi1234le','abc123'),
 
 -- Populate the tickets table.
 
---INSERT OR REPLACE
---INTO   tickets(start_time, username, theater_name, movie_name)
---VALUES (),
---       (),
---       ();
+INSERT OR REPLACE
+INTO       tickets (performance_id, username)
+VALUES  (1,'fi1234le'),
+        (2,'fe1234rö'),
+        (3,'jo1234do');
 
 -- Populate the theaters table.
 
@@ -85,7 +92,19 @@ VALUES ('Alien', 'tt0078748', 117, 1979),
        ('Pulp Fiction', 'tt0110912', 154, 1994),
        ('Interstellar', 'tt0816692', 169, 2014);
 
+-- Populate the performances table.
+
+INSERT OR REPLACE
+INTO   performances(start_time, performance_date, theater_name, imdb_key)
+VALUES  ('12:00','2023-02-23','Lund', 'tt0078748'),
+        ('15:00','2023-02-23','Lund', 'tt0110912'),
+        ('18:00','2023-02-23','Lund', 'tt0816692'),
+        ('19:30','2023-02-24','Malmö', 'tt0816692'),
+        ('19:30','2023-02-24','Helsingborg', 'tt0816692'),
+        ('19:30','2023-02-24','Lund', 'tt0816692');
+
 -- Commit the transaction.
+
 
 END TRANSACTION;
 
