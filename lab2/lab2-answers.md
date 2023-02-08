@@ -16,3 +16,8 @@ Tickets and performances are weak entity sets. Tickets can not exist without use
 
 Ticket ID, to avoid competitors getting knowledge on sold tickets. 
 
+<h2> There are at least two ways of keeping track of the number of seats available for each performance – describe them both, with their upsides and downsides </h2>
+
+1. We have a sum capacity which subracts for each new ticket. Simple, low memory  
+2. Log every new ticket transaction, the sum will keep track of the available seats. This works like a bank account and allows traceability.
+
